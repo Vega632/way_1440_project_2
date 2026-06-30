@@ -306,11 +306,21 @@ async def answer_question(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 def main():
     token = os.getenv("TELEGRAM_TOKEN")
+    proxy_url = os.getenv("PROXY_URL")
     if not token:
         logger.error("TELEGRAM_TOKEN не найден!")
         return
     
-    app = Application.builder().token(token).build()
+    from telegram.request import HTTPXRequest
+    request = HTTPXRequest(
+        connection_pool_size=8,
+        read_timeout=30,
+        write_timeout=30,
+        connect_timeout=30,
+        proxy_url=proxy_url if proxy_url else None
+    )
+    
+    app = Application.builder().token(token).request(request).build()
     
     conv_handler = ConversationHandler(
         entry_points=[CommandHandler('start', start)],
