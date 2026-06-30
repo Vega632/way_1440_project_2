@@ -1,0 +1,4 @@
+openai           1.6.1
+python-dotenv    1.2.2
+python-telegram-bot 21
+supabase         2.31.0
